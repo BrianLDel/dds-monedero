@@ -31,7 +31,7 @@ public class Cuenta {
     AmountValidator.negativeAmount(cuanto);
     AmountValidator.maxDesposite(getTodaysDeposites());
 
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+    movimientos.add(new Movimiento(LocalDate.now(), cuanto, true));
   }
 
   public void sacar(double cuanto) {
@@ -39,7 +39,7 @@ public class Cuenta {
     AmountValidator.insuficientBalance(getSaldo() - cuanto);
     AmountValidator.maxWithdraw(getMontoExtraidoA(LocalDate.now()));
 
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+    movimientos.add(new Movimiento(LocalDate.now(), cuanto, false));
   }
 
   public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
