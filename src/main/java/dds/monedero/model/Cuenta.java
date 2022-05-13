@@ -30,7 +30,7 @@ public class Cuenta {
   public void sacar(double cuanto) {
     AmountValidator.negativeAmount(cuanto);
     AmountValidator.insuficientBalance(getSaldo() - cuanto);
-    AmountValidator.maxWithdraw(getMontoExtraidoA(LocalDate.now()));
+    AmountValidator.maxWithdraw(getMontoExtraidoA(LocalDate.now()) + cuanto);
 
     movimientos.add(new Movimiento(LocalDate.now(), cuanto, false));
   }
