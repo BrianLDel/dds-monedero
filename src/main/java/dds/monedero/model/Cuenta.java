@@ -12,16 +12,9 @@ import java.util.List;
 
 public class Cuenta {
 
-  private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
 
-  public Cuenta() {
-    saldo = 0;
-  }
-
-  public Cuenta(double montoInicial) {
-    saldo = montoInicial;
-  }
+  public Cuenta() {}
 
   public void setMovimientos(List<Movimiento> movimientos) {
     this.movimientos = movimientos;
@@ -42,14 +35,9 @@ public class Cuenta {
     movimientos.add(new Movimiento(LocalDate.now(), cuanto, false));
   }
 
-  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
-    Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
-    movimientos.add(movimiento);
-  }
-
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
+        .filter(movimiento -> movimiento.fueExtraido(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
@@ -59,11 +47,16 @@ public class Cuenta {
   }
 
   public double getSaldo() {
-    return saldo;
-  }
+    double depositosMonto =  getMovimientos().stream()
+        .filter(movimiento -> movimiento.isDeposito())
+        .mapToDouble(Movimiento::getMonto)
+        .sum();
+    double retirosMonto = getMovimientos().stream()
+        .filter(movimiento -> movimiento.isExtraccion())
+        .mapToDouble(Movimiento::getMonto)
+        .sum();
 
-  public void setSaldo(double saldo) {
-    this.saldo = saldo;
+    return depositosMonto - retirosMonto;
   }
 
   public double getTodaysDeposites(){
