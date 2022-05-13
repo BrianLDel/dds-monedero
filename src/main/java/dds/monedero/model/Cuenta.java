@@ -60,7 +60,7 @@ public class Cuenta {
   }
 
   public double getTodaysDeposites(){
-    return getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count();
+    return getMovimientos().stream().filter(movimiento -> movimiento.fueDepositado(LocalDate.now())).count();
   }
 
 }
